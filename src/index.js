@@ -811,7 +811,7 @@ class Tracker {
 
         const that = this;
         setTimeout(() => {
-            uni.request({
+            wx.request({
                 url: this.configTrackerUrl + (this.configRequestMethod.toLowerCase() === 'GET' ? '?' + request : ''),
                 data: request,
                 method: this.configRequestMethod,
