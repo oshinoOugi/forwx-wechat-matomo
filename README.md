@@ -6,15 +6,16 @@
 Link your Piwik/Matomo installation
 
 原作者：
+[https://github.com/xuwaer/kpframework-wechat-matomo](xuwaer/kpframework-wechat-matomo)
 [https://github.com/Liudapeng/wechat-matomo](https://github.com/Liudapeng/wechat-matomo)
 
-由于很久没更新了，所以fork后修改部分问题
+原包里request请求需要uni依赖，所以fork后去除针对uni的依赖；
 
 
 ## Installation
 
 ```bash
-npm install --save kpframework-wechat-matomo
+npm install --save forwx-wechat-matomo
 ```
 
 ## Usage
@@ -27,7 +28,7 @@ npm install --save kpframework-wechat-matomo
  * 注意初始化动作需要再 app class 执行之前初始化，否则无法自动追踪App生命周期事件
  *    trackerApiUrl:
  *      生产：待定
- *      测试：http://172.18.62.201:7080/piwik.php
+ *      测试：https://xxxxx/piwik.php
  *    siteId:
  *      生产：待定，每个应用申请一个
  *      测试：1
