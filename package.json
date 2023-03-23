@@ -1,6 +1,6 @@
 {
-  "name": "kpframework-wechat-matomo",
-  "version": "0.0.2",
+  "name": "forwx-wechat-matomo",
+  "version": "0.0.4",
   "description": "piwik、matomo微信小程序客户端，from matomo js-sdk 3.7.0",
   "main": "miniprogram_dist/index.js",
   "miniprogram": "miniprogram_dist",
@@ -16,11 +16,11 @@
     "lint": "eslint \"src/**/*.js\"",
     "lint-tools": "eslint \"tools/**/*.js\" --rule \"import/no-extraneous-dependencies: false\""
   },
-  "author": "xuwaer@gmail.com",
+  "author": "tapriu@126.com",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xuwaer/kpframework-wechat-matomo"
+    "url": "https://github.com/oshinoOugi/forwx-wechat-matomo"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

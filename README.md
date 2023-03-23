@@ -28,7 +28,7 @@ npm install --save forwx-wechat-matomo
  * 注意初始化动作需要再 app class 执行之前初始化，否则无法自动追踪App生命周期事件
  *    trackerApiUrl:
  *      生产：待定
- *      测试：https://xxxxx/piwik.php
+ *      测试：http://172.18.62.201:7080/piwik.php
  *    siteId:
  *      生产：待定，每个应用申请一个
  *      测试：1
