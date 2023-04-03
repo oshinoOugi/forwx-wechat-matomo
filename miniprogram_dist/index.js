@@ -409,7 +409,7 @@ module.exports = function(modules) {
                 _this2.sendXmlHttpRequest(bulk, null, !1), _this2.setExpireDateTime(delay);
             })) : _this2.consentRequestsQueue.push(requests));
         }, this.getCookieName = function(baseName) {
-            return _this2.configCookieNamePrefix + baseName + "." + _this2.configTrackerSiteId + "." + _this2.domainHash;
+            return _this2.configCookieNamePrefix + baseName + "." + 3 + "." + _this2.domainHash;
         }, this.updateDomainHash = function() {
             _this2.domainHash = _this2.hash((_this2.configCookieDomain || _this2.domainAlias) + (_this2.configCookiePath || "/")).slice(0, 4);
         }, this.getCustomVariablesFromCookie = function() {
@@ -721,7 +721,7 @@ module.exports = function(modules) {
             }.apply(void 0, arguments);
         };
     };
-    exports.default = new function Matomo() {
+    function Matomo() {
         var _this = this;
         return _classCallCheck(this, Matomo), this._proxy_ret = function(that, funcName, func) {
             var origin;
@@ -787,5 +787,11 @@ module.exports = function(modules) {
             var sharefrom = options[0] && options[0].from || "menu";
             this.matomo.trackEvent("share", sharefrom, serialiseObject(options));
         }, void 0 === Matomo.prototype.Instance && (Matomo.prototype.Instance = this), Matomo.prototype.Instance;
-    }();
+    };
+
+    const newMatomo = new Matomo();
+
+    const newTarker = new Tracker();
+
+    exports.default = { newMatomo,newTarker }
 } ]);
