@@ -149,7 +149,14 @@ module.exports = function(modules) {
         }
         return (temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4)).toLowerCase();
     }
-    var expireDateTime = void 0, sysInfo = wx.getSystemInfoSync(), navigatorAlias_userAgent = sysInfo.model + " " + sysInfo.language + " " + sysInfo.screenWidth + "x" + sysInfo.screenHeight + " " + sysInfo.platform + " " + sysInfo.system + " " + sysInfo.version, navigatorAlias_platform = sysInfo.platform, utf8_encode = function(argString) {
+
+    var obj = {};
+    if(process.env.TARO_ENV == 'alipay'){
+        obj = my;
+    }else{
+        obj = wx;
+    }
+    var expireDateTime = void 0, sysInfo = obj.getSystemInfoSync(), navigatorAlias_userAgent = sysInfo.model + " " + sysInfo.language + " " + sysInfo.screenWidth + "x" + sysInfo.screenHeight + " " + sysInfo.platform + " " + sysInfo.system + " " + sysInfo.version, navigatorAlias_platform = sysInfo.platform, utf8_encode = function(argString) {
         return unescape(encodeURIComponent(argString));
     }, Tracker = function() {
         function Tracker(trackerUrl, siteId) {
@@ -327,17 +334,23 @@ module.exports = function(modules) {
             }
         } ]), Tracker;
     }(), _initialiseProps = function() {
+        var obj = {};
+        if(process.env.TARO_ENV == 'alipay'){
+            obj = my;
+        }else{
+            obj = wx;
+        }
         var _this2 = this;
         this.setCookie = function(cookieName, value, msToExpire, path, domain, isSecure) {
             var expiryDate;
             _this2.configCookiesDisabled || (expiryDate = void 0, msToExpire && (expiryDate = new Date()).setTime(expiryDate.getTime() + msToExpire), 
-            wx.setStorageSync("piwik_" + cookieName, encodeURIComponent(value) + (msToExpire ? ";" + expiryDate.getTime() : "")));
+            obj.setStorageSync("piwik_" + cookieName, encodeURIComponent(value) + (msToExpire ? ";" + expiryDate.getTime() : "")));
         }, this.getCookie = function(cookieName) {
             if (_this2.configCookiesDisabled) return 0;
             var cookieValue = 0;
             try {
-                var res = wx.getStorageSync("piwik_" + cookieName);
-                res && (res.split(";")[1] < new Date().getTime() ? wx.removeStorage({
+                var res = obj.getStorageSync("piwik_" + cookieName);
+                res && (res.split(";")[1] < new Date().getTime() ? obj.removeStorage({
                     key: "piwik_" + cookieName
                 }) : cookieValue = decodeURIComponent(res.split(";")[0]));
             } catch (e) {}
@@ -371,10 +384,13 @@ module.exports = function(modules) {
             isDefined(fallbackToGet) && null !== fallbackToGet || (fallbackToGet = !0);
             var that = _this2;
             setTimeout(function() {
-                wx.request({
+                obj.request({
                     url: _this2.configTrackerUrl + ("GET" === _this2.configRequestMethod.toLowerCase() ? "?" + request : ""),
                     data: request,
                     method: _this2.configRequestMethod,
+                    headers: {
+                        "content-type": _this2.configRequestContentType
+                    },
                     header: {
                         "content-type": _this2.configRequestContentType
                     },
@@ -409,7 +425,7 @@ module.exports = function(modules) {
                 _this2.sendXmlHttpRequest(bulk, null, !1), _this2.setExpireDateTime(delay);
             })) : _this2.consentRequestsQueue.push(requests));
         }, this.getCookieName = function(baseName) {
-            return _this2.configCookieNamePrefix + baseName + "." + 3 + "." + _this2.domainHash;
+            return _this2.configCookieNamePrefix + baseName + "." + _this2.configTrackerSiteId + "." + _this2.domainHash;
         }, this.updateDomainHash = function() {
             _this2.domainHash = _this2.hash((_this2.configCookieDomain || _this2.domainAlias) + (_this2.configCookiePath || "/")).slice(0, 4);
         }, this.getCustomVariablesFromCookie = function() {
@@ -541,9 +557,11 @@ module.exports = function(modules) {
             return _this2.getTrackerUrl();
         }, this.getSiteId = function() {
             return _this2.configTrackerSiteId;
-        }, this.resetUserId = function() {
+        }, this.resetUserId = function(siteId) {
+            _this2.configTrackerSiteId = siteId,
             _this2.configUserId = "", _this2.deleteCookie(_this2.getCookieName("user_id"), "", "");
-        }, this.setUserId = function(userId) {
+        }, this.setUserId = function(userId,siteId) {
+            _this2.configTrackerSiteId = siteId,
             isDefined(userId) && null != userId && userId.toString().length && (_this2.configUserId = userId.toString(), 
             userId = _this2.getCookie(_this2.getCookieName("user_id")), _this2.configUserId != userId && _this2.trackEvent("sys", "bind-user-id"), 
             _this2.setCookie(_this2.getCookieName("user_id"), _this2.configUserId, _this2.getRemainingVisitorCookieTimeout()));
