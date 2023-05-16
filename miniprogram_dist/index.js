@@ -340,16 +340,31 @@ module.exports = function(modules) {
         }else{
             obj = wx;
         }
+        var customSetStorageSync = function(key,data){
+            if(process.env.TARO_ENV == 'alipay'){
+                obj.setStorageSync({key:key, data:data});
+            }else{
+                obj.setStorageSync(key,data);
+            }
+        };
+        var customGetStorageSync = function(key){
+            if(process.env.TARO_ENV == 'alipay'){
+                let res = obj.getStorageSync({key:key});
+                return res.data;
+            }else{
+                return obj.getStorageSync(key);
+            }
+        };
         var _this2 = this;
         this.setCookie = function(cookieName, value, msToExpire, path, domain, isSecure) {
             var expiryDate;
             _this2.configCookiesDisabled || (expiryDate = void 0, msToExpire && (expiryDate = new Date()).setTime(expiryDate.getTime() + msToExpire), 
-            obj.setStorageSync("piwik_" + cookieName, encodeURIComponent(value) + (msToExpire ? ";" + expiryDate.getTime() : "")));
+            customSetStorageSync("piwik_" + cookieName, encodeURIComponent(value) + (msToExpire ? ";" + expiryDate.getTime() : "")));
         }, this.getCookie = function(cookieName) {
             if (_this2.configCookiesDisabled) return 0;
             var cookieValue = 0;
             try {
-                var res = obj.getStorageSync("piwik_" + cookieName);
+                var res = customGetStorageSync("piwik_" + cookieName);
                 res && (res.split(";")[1] < new Date().getTime() ? obj.removeStorage({
                     key: "piwik_" + cookieName
                 }) : cookieValue = decodeURIComponent(res.split(";")[0]));
